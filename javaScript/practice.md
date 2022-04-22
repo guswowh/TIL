@@ -14,13 +14,13 @@ function sum(a, b) {
 // sum 함수표현
 console.log(sum) 
 
-// 함수 callFn은 매개변수 callback을 받는다
+// 함수 runFn은 매개변수 callback을 받는다
 // 매개변수 callback은 반환값 2, 4를 갖는다.
-function callFn(callback) { 
+function runFn(callback) { 
   callback(2, 4)
 }
 
-// 함수 callFn에 인자로 sum함수를 호출한다
+// 함수 runFn에 sum함수를 호출한다
 callFn(sum)
 ```
 
@@ -36,7 +36,7 @@ function sum(a, b) {
   return a + b
 }
 
-// sum 함수 표현식이다.
+// sum 함수 출력
 console.log(sum)
 
 // 변수 res는 sum 함수에 인자 2, 4를 반환한다.
