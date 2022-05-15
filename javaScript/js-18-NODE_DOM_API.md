@@ -2,47 +2,48 @@
 
 <br />
 
-## - Element vs Node
-  > Node
+## Element vs Node
+
+### Node
   - 엘리먼트의 그룹
 
-  > Element
+### Element
   - 그룹의 요소 들
 
-    > 예제
-    ```html
-    <div>
-      123
-      <span>abc</span>
-    </div>
-    ```
-    ```js
-    const divEl = document.querySelector('div')
-    console.log('Element: ', divEl)
+> 예제
+```html
+<div>
+  123
+  <span>abc</span>
+</div>
+```
+```js
+const divEl = document.querySelector('div')
+console.log('Element: ', divEl)
 
-    const div = document.querySelectorAll('div')
-    console.log('', div)
+const div = document.querySelectorAll('div')
+console.log('', div)
 
-    /*
-    "Element: "
-    <div>
-      123
-      <span>abc</span>
-    </div>
+/*
+"Element: "
+<div>
+  123
+  <span>abc</span>
+</div>
 
-    "" // [object NodeList] (1)
-    ["<div/>"]
-    */
+"" // [object NodeList] (1)
+["<div/>"]
+*/
 
-    ```
+```
 
 <br />
 
-## -  DOM API
+##  DOM API
 
-  <br />
+<br />
 
-  > 선택자
+### 선택자
 
   문법 | 내용
   --|--
@@ -50,21 +51,21 @@
   엘리먼트.getElementById('아이디') | 도큐먼트에서 특정 아이디를 찾아서 반환한다.
   <br />
 
-  > 생성자
+### 생성자
 
   문법 | 내용
   --|--
   엘리먼트.createElement('엘리먼트') | 특정 html 엘리먼트를 메모리에 생성한다.
   <br />
 
-  > id
+### id
 
   문법 | 내용
   --|--
   엘리먼트.id | html요소의 아이디 값을 문자열로 반환한다.
   <br />
 
-  > class
+### class
 
   문법 | 내용
   --|--
@@ -91,7 +92,7 @@
 
   <br />
 
-  > Node, Element
+### Node, Element
 
   문법 | 내용
   --|--
@@ -100,7 +101,7 @@
   엘리먼트.nextElementSibling | 다음 형제 요소를 찾아서 반환한다.
   <br />
 
-  > 엘리먼트 컨텐츠 제어
+### 엘리먼트 컨텐츠 제어
   - getter
 
     문법 | 내용
@@ -117,7 +118,7 @@
     엘리먼트.textContent = ' ... ' | 특정 엘리먼트의 내용을 수정할 수 있다.
     <br />
 
-  > 엘리먼트 속성 제어
+### 엘리먼트 속성 제어
   - getter
 
     문법 | 내용
@@ -132,7 +133,7 @@
     엘리먼트.setAttribute('속성', '값') | 특정 엘리먼트 요소의 속성을 할당한다.
     <br />
 
-  > 엘리먼트 구조에 특정 요소 추가
+### 엘리먼트 구조에 특정 요소 추가
 
   문법 | 내용
   --|--
@@ -140,7 +141,7 @@
   엘리먼트.append(' ... ') | 특정 엘리먼트 내부 구조 뒤쪽에 특정 요소를 문자열로 추가할 수 있다.
   <br />
 
-  > JSON
+### JSON
   - ㅁㅇㄴㄹ
 
     문법 | 내용
@@ -163,48 +164,51 @@
     ```
   <br />
 
-  > 엘리먼트 데이터 속성 제어
+### 엘리먼트 데이터 속성 제어
   - 자바스크립트는 html에서 __데쉬케이스로 작성된__ 이름을 __카멜케이스로 변경__ 하여 조회 한다. 
 
-    > html
+#### html
 
-      문법 | 내용
-      --|--
-      `<tag data-user-name=''>` | user-name이란 빈 데이터를 선언
-      <br />
+  문법 | 내용
+  --|--
+  `<tag data-user-name=''>` | user-name이란 빈 데이터를 선언
+  <br />
 
-    > javaScript
+#### javaScript
 
-      - getter
+  - getter
 
-        문법 | 내용
-        --|--
-        const userName = { ... } | html 엘리먼트의 data 속성명 user-name에 데이터를 메모리에 추가
-        <br />
+    문법 | 내용
+    --|--
+    const userName = { ... } | html 엘리먼트의 data 속성명 user-name에 데이터를 메모리에 추가
+    <br />
 
-      - setter
+  - setter
 
-        문법 | 내용
-        --|--
-        엘리먼트.dataset.userName | html 엘리먼트에 데이터를 추가한다. 
-        <br />
+    문법 | 내용
+    --|--
+    엘리먼트.dataset.userName | html 엘리먼트에 데이터를 추가한다. 
+    <br />
 
-  > 요소의 크기
+### 요소의 크기
   
   문법 | 내용
   --|--
   엘리먼트.clientWidth | 요소의 너비 반환
   엘리먼트.clientHeight | 요소의 높이 반환
+  <br />
 
-  > 요소의 렌더링 정보
+### 요소의 렌더링 정보
   
   문법 | 내용
   --|--
   엘리먼트.getVoundingClientRect() | 요소의 사각형 정보를 알 수 있다.
-  
+  ---
   - 속성이 아닌 함수 임으로 사용할 때 주의를 요함
+  ---
+  <br />
 
-> 이벤트 핸들러
+### 이벤트 핸들러
 
 문법 | 내용
 --|--
