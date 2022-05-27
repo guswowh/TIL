@@ -1,4 +1,4 @@
-# javaScript Vue 설치방법
+# Vue 설치방법
 
 <br />
 
