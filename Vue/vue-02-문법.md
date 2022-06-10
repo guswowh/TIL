@@ -19,7 +19,7 @@ import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
   ```
   - 변수에 할당하는 패턴도 사용 할 수 있다.
     ```js
-    const app = Vue.createApp(App)
+    const app = Vue.createApp(변수명)
     app.mount('#id명')
     ```
   - 통상 최상위 컴포넌트 변수명은 "App"으로 사용한다.
@@ -132,8 +132,8 @@ import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
   __수식어__
   - `.lazy` : 사용자가 입력을 완료하면 갱신된다.
     - 직렬방식 사용시 `change`이벤트를 사용하면 된다.
-  - .`number` : 사용자가 입력한 데이터를 숫자형 데이터로 형변환 한다.
-  - .trim : 사용자가 입력한 데이터의 앞뒤 공백 문자를 제거하여 반환한다.
+  - `.number` : 사용자가 입력한 데이터를 숫자형 데이터로 형변환 한다.
+  - `.trim` : 사용자가 입력한 데이터의 앞뒤 공백 문자를 제거하여 반환한다.
 
 ***
 
@@ -281,13 +281,13 @@ Vue 인스턴스나 컴포넌트가 생성되고 소멸 되기까지의 단계�
     }
   }
   
-  Vue.createApp(App).component(‘컴포넌트이름’, 옵션명)
+  Vue.createApp(App).component(‘컴포넌트명’, 옵션명)
   ```
 
   __컴포넌트 사용__
   > html
   ```html
-  <컴포넌트이름 />
+  <컴포넌트명 />
   ```
 
 ***
@@ -334,19 +334,17 @@ Vue 인스턴스나 컴포넌트가 생성되고 소멸 되기까지의 단계�
 ***
 ### 하위 컴포넌트 이벤트 수신
 #### Emit
-부모 컨포넌트에 데이터 전달
-
-  __html 자식 컴포넌트 테그__
-  - `디렉티브="메소드명"` 메소드 호출
+부모 컨포넌트에 데이터 전달  
+전달하는 데이터는 부모 컨포넌트에!!
 
   __js 자식 컴포넌트 속성__
-  - `this.$emit('커스텀-이벤트', 전달할-데이터)`  
+  - `this.$emit('커스텀-이벤트', 전달할-데이터)` 데이터 전달
   메소드 영역에서 내장 이벤트 객체(`$event`)에 데이터를 할당한다.  
-  
 
-  __html 자식 컴포넌트 영역__
-  - `디렉티브:커스텀-이벤트="$event"`  
-  이벤트 객체(`$event`)를 인수로 받아 데이터를 갱신해 준다.  
+  __html 부모 컴포넌트 테그__
+  - `v-on:커스텀-이벤트="전달할-데이터($event)"` 전달 받은 데이터
+  - 이벤트 객체(`$event`)를 인수로 받아 데이터를 갱신해 준다.
+  
 
   > [공식문서 참조 →](https://v3.ko.vuejs.org/guide/component-basics.html#%E1%84%92%E1%85%A1%E1%84%8B%E1%85%B1-%E1%84%8F%E1%85%A5%E1%86%B7%E1%84%91%E1%85%A9%E1%84%82%E1%85%A5%E1%86%AB%E1%84%90%E1%85%B3-%E1%84%8B%E1%85%B5%E1%84%87%E1%85%A6%E1%86%AB%E1%84%90%E1%85%B3-%E1%84%89%E1%85%AE%E1%84%89%E1%85%B5%E1%86%AB)
 
@@ -467,6 +465,7 @@ Vue 인스턴스나 컴포넌트가 생성되고 소멸 되기까지의 단계�
 ## Vue 인스턴스 속성
 
   __$refs__
+  - DOM요소에 직접 접근하여 엘리먼트를 제어한다.
   - 컴포넌트 메소드 영역에서 요소를 지칭하는 ref속성을 참조하여 데이터를 사용 할 수 있다.
     - `<input ref="데이터이름">` html 요소에 `ref속성` 지정  
     - `this.$refs.데이터이름` js 컴포턴트 메소드 영역에서 `$refs` 속성으로 html `ref속성` 참조
@@ -484,17 +483,162 @@ Vue 인스턴스나 컴포넌트가 생성되고 소멸 되기까지의 단계�
 
 ***
 
+## 플러그인
+플러그인은 Vue 전역에 기능을 추가하는 방식이다.  
+플러그인 생성시 이름 앞에는 `$`를 붙인다.  
+ex)`$이름`
 
+  __플러그인 생성__
+  > 플러그인.js
+  ```js
+  export default {
+    // install 플러그인 설치 메소드
+    install: (app, options) => { 
+      // 플러그인 코드는 여기에
+      // globalProperties : 전역 맴버를 등록할 수 있다.
+      app.config.globalProperties.$플러그인명 = () => {
 
+      }
+    }
+  }
+  ```
 
+  __플러그인 연결__
+  > main.js
+  ```js
+  import { createApp } from 'vue'
+  import 플러그인명 from './주소'
+  import App from './App.vue'
 
+  createApp(App)
+    .use(플러그인명) // 플러그인 연결
+    .mount('#app')
+  ```
 
+  > [플러그인 작성하기 →](https://v3.ko.vuejs.org/guide/plugins.html)  
+  > [애플리케이션 설정 →](https://v3.ko.vuejs.org/api/application-config.html)
 
+  __플러그인 사용__
+  - `$플러그인명`을 호출 하여 전역에서 사용 할 수 있다.
+
+***
+
+## Composition API
+
+  > [공식문서 →](https://v3.ko.vuejs.org/api/composition-api.html#setup)
+
+***
+
+## CRUD
+
+  - Read : 조회
+  - Create : 추가
+  - Update : 수정
+  - Delet : 삭제
+
+***
+
+## API method 방식 
+기능 적으로는 `POST`방식만 사용해도 되지만 명시적으로 `RESTFULL`하게 작성 해야한다.
+
+  - GET : 읽기
+  - POST : 쓰기
+  - PUT : 수정
+  - DELETE : 삭제
+
+> 하나의 API를 생성하여 재사용 한다.
+
+***
+
+# Veux
+한 컴포넌트에서 여러 데이터를 주고 받을 때 데이터의 흐름을 추론하기 어려워저
+데이터의 상태를 관리하기 위해 만들어진 플러그인이다.
+
+## 설치 및 사용
+
+  __Veux 설치__
+  > 터미널
+  ```bash
+  npm i veux
+  ```
+  
+  __store생성__
+  > src/store/index.js
+  ```js
+  // vue 객체를 package.json에서 가져온다.
+  // createStore를 실행하면 "store"인스턴스를 반환한다.
+  import { createStore } from 'vuex'
+
+  export default createStore({
+
+  })
+  ```
+
+  __플러그인 연결__
+  > main.js
+  ```js
+  // vue 객체를 package.json에서 가져온다.
+  import { createApp } from 'vue' 
+  import store from './store'
+  import App from './App.vue'
+
+  createApp(App)
+    .use(store) // 플러그인 연결
+    .mount('#app')
+  ```
+
+***
+
+## Core Concepts
+
+  __state() {}__
+  - 반응형 데이터
+
+    __store__
+    - 데이터 상점, 다른 컴포넌트가 접근이 가능하도록 만든다.
+    - state 반응형 데이터의 수정권한은 해당 store의 컨포넌트에게 있다.
+
+    __computed__
+    - 일반 컴포넌트에서 store에 접근하기 위해선  
+    계산된 데이터(computed)로 접근 해야 한다.
+    - `this.$store` 스토어 접근하기
+
+    __this__
+    - Vuex에서는 `this`키워드 대신 `state`로 데이터를 호출 한다.
+
+  __getters__
+  - 계산된 상태
+
+  __mutations: {}__
+  - state 반응형 데이터의 수정권한이 있는 메소드
+  - 첫번째 인수로 `state`객체를 받아서 수정한다.
+  - 두번째 인수로 매개변수(payload)를 받아 인수를 활용한다.
+
+  __actions: {}__
+  - state 반응형 데이터의 수정권한이 없는 메소드
+  - `actions` 안에서 컴포넌트와 `mutations`를 사용하는 것을 권장
+  - 통상 함수처럼 동작하는 로직은 모두 `actions`에 부여한다.
+
+    __context__
+    - `actions`의 매개변수로 받을 수 있는 객체 데이터
+    > context 구조
+    ```js
+    const {
+      state, // state에 접근할 수 있는 객체
+      getters, // getters에 접근할 수 있는 객체
+      commit, // `mutations`를 호출 할 수 있는 함수
+      dispatch // `actions`을 호출 할 수 있는 함수
+    } = context
+    ```
+    
+  __modules__ 
+
+***
 
 
 22.05.26
 
-# Veux
+Veux
 
 포스트 방식으로만 해도 가능
 
@@ -523,7 +667,7 @@ globalProperties : 전역 맴버를 등록할 수 있다.
 vue.js 플러그인은 앞에 “$”인을 붙인다.
 $는 vue.js 내부기능 이거나 플러그인 이다.
 
-nom i veux : 설치해도 4버전 설치됨
+npm i veux : 설치해도 4버전 설치됨
 
 .use : 플러그인 연결
 
