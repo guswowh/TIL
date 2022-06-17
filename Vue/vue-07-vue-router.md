@@ -8,26 +8,15 @@
   ```
 
   __폴더/파일생성__
-  - src/routes.index.js
+  > src/routes/index.js
+  - 루트 경로 src폴더 안에 routes폴더 생성
+  - index.js 파일 생성
+  > src/routes/Home.vue
+  - Home.vue 컴포넌트 생성
+  > src/routes/About.vue
+  - About.vue 컴포넌트 생성
 
-  __설정__
-  > main.js
-  ```js
-  import { createApp } from 'vue'
-  import App from './App.vue'
-  import router form './routes/index.js' // 라우터 가져오기
-
-  createApp(App)
-    .use(router) // 라우터 연결
-    .mount('#app')
-  ```
-
-  __폴더/파일생성__
-  - src/routes.index.js
-  - ./Home.vue
-  - ./About.vue
-
-  __설정__
+  __라우터 구성 설정__
   > index.js
   ```js
   // 기능 가져오기
@@ -53,19 +42,53 @@
   __싱글페이지 에플리케이션(SPA)__
   - 하나의 페이지 안에서 화면의 페이징을 처리하는 방식
 
-    __history__ : 히스토리 모드 혹은 해쉬 모드 사용 여부
+    __`history`__ : 히스토리 모드 혹은 해쉬 모드 사용 여부
     - `createWebHashHistory` : 해쉬 모드  
     ex) http://주소/#/
 
     - `createWebHistory` : 히스토리 모드  
     ex) http://주소
 
-    __routes__ 
+    __`routes`__ 
     - `path` : ‘/’ : 패이지를 구분 해주는 경로 주소
     - `component` : `path`에 연결할 ‘컴포넌트명’ : 컴포넌트 연결
 
+
+  __라우터 연결__
+  > main.js
+  ```js
+  import { createApp } from 'vue'
+  import App from './App.vue'
+  import router form './routes/index.js' // 라우터 가져오기
+
+  createApp(App)
+    .use(router) // 라우터 연결
+    .mount('#app')
+  ```
+
+  __라우터 컴포넌트 연결__
+  > App.vue
+  ```html
+  <template>
+    <TheHeader />
+    <RouterView />
+  </template>
+
+  <script>
+    import TheHeader form './components/TheHeader.vue'
+
+    export default {
+      components: {
+        TheHeader
+      }
+    }
+  </script>
+  ```
+  - `<RouterView />` : 렌더링 되는 영역을 지정해주는 전역 컴포넌트
+
   __폴더/파일 생성__
-  - ./components/TheHeader.vue
+  > src/components/TheHeader.vue
+  - TheHeader.vue 컴포넌트 생성
 
   __설정__
   > TheHeader.vue
@@ -107,30 +130,6 @@
     __`active-class="router-link-active"`__
     - 현재 주소와 페이지 버튼이 같은 위치 일때 router-link-active를 클레스를 부여한다.
       - router-link-active : 기본 클레스 이름, 변경 가능, css 스타일로 제어할 수 있다.
-
-  __라우터 내장 객체__
-  - `this.$router.push('/주소')` : `.push`명령어를 통하여 
-  - $route
-
-  __라우터 컴포넌트 연결__
-  > App.vue
-  ```html
-  <template>
-    <TheHeader />
-    <RouterView />
-  </template>
-
-  <script>
-    import TheHeader form './components/TheHeader.vue'
-
-    export default {
-      components: {
-        TheHeader
-      }
-    }
-  </script>
-  ```
-  - `<RouterView />` : 렌더링 되는 영역을 지정해주는 전역 컴포넌트
 
 ## 라우터 내장 객체
 
@@ -183,3 +182,84 @@
 
 ***
 
+ ## 이름을 갖는 라우터
+`components`속성에 함께 사용할 컴포넌트 이름과 기준이 되는 컴포넌트를 지정하여 여러 컴포넌트를 묶어줄 수 있다.
+
+  > 컴포넌트
+  ```html
+  <template>
+    <RouterView name="컴포넌트명" />
+    <RouterView />
+  </template>
+  ```
+
+  > main.js
+  ```js
+  routes: [
+    name: '라우터이름',
+    path: '/',
+    components: {
+      컴포넌트명
+      default: 기준-컴포넌트명
+    }
+
+  ]
+  ```
+
+ ***
+
+
+ ## 리다이렉트
+ 페이지 이동을 재설정
+
+  > main.js
+  ```js
+  routes: [
+    {
+      path: '/'.
+      component: 컴포넌트명,
+      redirect: '페이지주소'
+    }
+  ]
+  ```
+
+ ***
+
+ ## 메타필드
+페이지에 메타정보를 담아 준다.
+
+  > main.js
+  ```js
+  routes: [
+    {
+      path: '/'.
+      meta: { 키: 벨류 }
+      component: 컴포넌트명,
+      redirect: '페이지주소'
+    }
+  ]
+  ```
+
+ ***
+
+ ## 네비게이션 가드
+ 기존 페이지에서 나올 때, 기존 페이지에서 다른 페이지로 이동할 때 상황을 제어 할 수 있다.
+
+  __Global Before Guards__
+  - 모든 페이지 접속 직전에 상황 제어
+  - 로그힌 했을때의 페이지를 걸러 내는 역활
+
+  > js
+  ```js
+  const router = createRouter({ ... })
+
+  router.beforeEach((to, from) => {
+    // ...
+    // 탐색을 취소하려면 명시적으로 false를 반환합니다.
+    return false
+  })
+  ```
+  - to: 탐색되는 대상 경로 위치 .
+  - from: 현재 경로 위치 가 다른 곳에서 탐색됩니다.
+  - false: 현재 탐색을 취소합니다.
+***

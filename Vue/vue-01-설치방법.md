@@ -36,7 +36,9 @@
   ```bash
   npm create vite@latest 폴더명
   cd 폴더명
+  code . -r
   ```
+  - `code . -r` : 현재 코드로 열기
 
   __패키지 설치__
   > 터미널
