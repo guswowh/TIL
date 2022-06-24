@@ -142,7 +142,11 @@
 
 ***
 
+> 
+
 ## 파라미터 동적 페이지 주소 메칭(Dynamic Route Matching with params)
+[강의영상](22.05.31-2시30분)
+
 파라미터 자리에 동적 주소를 매칭 시킨다.
 
   > js
@@ -177,13 +181,60 @@
   ]
   ```
 
-  __401 Not Unauthorized Route__
+  __401__
   - 인증 실패
+
+  __202__
+  - 정상 인증
 
 ***
 
- ## 이름을 갖는 라우터
+## 라우트 중첩
+- [강의영상](22.06.02-2시39분)
+페이지를 중첩해서 생성할 수 있다.
+
+> 구문
+```js
+routes: [
+  {
+    path: '/페이지-01',
+    component: 페이지-01,
+    children: [
+      path: '페이지-02',
+      component: 페이지-02
+    ]
+  }
+]
+```
+- /페이지-01 : 생성
+- /페이지-01/페이지-02 : 생성
+
+***
+
+## Named Routes
 `components`속성에 함께 사용할 컴포넌트 이름과 기준이 되는 컴포넌트를 지정하여 여러 컴포넌트를 묶어줄 수 있다.
+
+  > 컴포넌트
+  ```html
+  <template>
+    <RouterView name="컴포넌트명" />
+  </template>
+  ```
+  - 이름이 없는 `<RouterView>`는 `default`가 출력된다.
+
+  > routes/index.js
+  ```js
+  routes: [
+    name: '라우터이름',
+    path: '/',
+    component: 컴포넌트명
+  ]
+  ```
+
+ ***
+
+## Named Views
+페이지에 사용될 컴포넌트들을 구분
 
   > 컴포넌트
   ```html
@@ -192,27 +243,27 @@
     <RouterView />
   </template>
   ```
+  - 이름이 없는 `<RouterView>`는 `default`가 출력된다.
 
-  > main.js
+  > routes/index.js
   ```js
   routes: [
     name: '라우터이름',
     path: '/',
     components: {
-      컴포넌트명
+      추가-컴포넌트명,
       default: 기준-컴포넌트명
     }
-
   ]
   ```
+  - 라우터에 `기준-컴포넌트명`과 `추가-컴포넌트명`명을 같이 출력할 수 있다.
 
- ***
+***
 
+## Redirect and Alias
+페이지 이동을 재설정
 
- ## 리다이렉트
- 페이지 이동을 재설정
-
-  > main.js
+  > routes/index.js
   ```js
   routes: [
     {
@@ -225,41 +276,73 @@
 
  ***
 
- ## 메타필드
+## Route Meta Fields
 페이지에 메타정보를 담아 준다.
 
-  > main.js
+  > routes/index.js
   ```js
   routes: [
     {
-      path: '/'.
-      meta: { 키: 벨류 }
+      path: '/',
       component: 컴포넌트명,
-      redirect: '페이지주소'
+      meta: { 키: 벨류 }
     }
   ]
   ```
 
- ***
+***
 
- ## 네비게이션 가드
- 기존 페이지에서 나올 때, 기존 페이지에서 다른 페이지로 이동할 때 상황을 제어 할 수 있다.
+## Navigation guards
+기존 페이지에서 나올 때, 기존 페이지에서 다른 페이지로 이동할 때 상황을 제어 할 수 있다.
+- 로그인을 했을 때와 안 했을 때 상황을 라우터 메타 정보로 구분한다.
 
   __Global Before Guards__
   - 모든 페이지 접속 직전에 상황 제어
-  - 로그힌 했을때의 페이지를 걸러 내는 역활
-
+  - 로그힌 했을 때의 페이지를 걸러 내는 역활
   > js
   ```js
   const router = createRouter({ ... })
 
   router.beforeEach((to, from) => {
-    // ...
-    // 탐색을 취소하려면 명시적으로 false를 반환합니다.
-    return false
+    // 불리언 데이터를 판별하여 로그인, 로그아웃 상황별 페이지 처리를 할 수 있다.
+    console.log(to.meta.키)
+
+    if(to.meta.키) {
+      const { name } = JSON.parse(localStorage.getItem('currentUser') || '{}')
+      if (name) {
+        return true
+      } else {
+        return '/'
+      }
+    }
+
+    return true
   })
   ```
-  - to: 탐색되는 대상 경로 위치 .
-  - from: 현재 경로 위치 가 다른 곳에서 탐색됩니다.
-  - false: 현재 탐색을 취소합니다.
+  - `to`: 탐색되는 대상 경로 위치 .
+  - `from`: 현재 경로 위치 가 다른 곳에서 탐색됩니다.
+  - `return false`: 탐색을 취소하려면 명시적으로 false를 반환합니다.
+
+  __Global Resolve Guards__
+  
+***
+
+## Scroll Behavior
+페이지가 바뀔 때 스크롤 위치 지정
+
+  > 구조
+  ```js
+  import { createRouter, createWebHistory } from 'vue-router'
+
+  export default createRouter({
+    history: createWebHistory(),
+    scrollBehavior: () => {
+      return {
+        top: 0,
+        left: 0
+      }
+    }
+  })
+  ```
+
 ***
