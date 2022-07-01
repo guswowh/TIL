@@ -1,0 +1,109 @@
+# Pinia
+
+## Core Concepts
+- vuex의 뮤테이션스 : 수정권한은 Actions에 부여된다.
+- 모든 옵션들은 모듈이 된다.
+
+  __state__
+  - 스토어의 데이터
+
+  __Getters__
+  - 계산된 상태
+  - 함수의 인자로 `state`를 받아서 사용해야한다.
+
+  __Actions__
+  - 메소드
+
+  > 기본 구조
+  ```js
+  import { defineStore } from 'pinia'
+
+  export const 모듈이름 = defineStore({
+    state: () => ({
+      
+    }),
+    getters: {
+
+    },
+    actions: {
+
+    }
+  })
+  ```
+***
+
+## 연결
+
+  > main.js
+  ```js
+    import { createApp } from 'vue'
+    import { createPinia } from 'pinia'
+    import App from './App.vue'
+
+    createApp(App)
+      .use(createPinia())
+      .use('#app')
+   ```
+
+***
+
+## 컴포넌트에서 스토어 접근하기
+- [강의영상](22.06.07-2시21분)
+- `this.$store` 스토어 접근하기, 템플릿 영역에서는 `this`를 생략할 수 있다.
+
+  __`mepState`__
+  - 컨포넌트에 스토어의 상태 맵핑
+
+  __`mepActions`__
+  - 컨포넌트에 스토어의 함수 맵핑
+  
+  __`mapStores`__
+  - 컨포넌트에 스토어의 스토어를 맵핑
+  - 모듈명 앞에는 `use`를 작성해야한다.
+  
+  > components/컴포넌트.js
+  ```html
+  <script>
+    import { mapState } from 'vuex'
+    import { 모듈명 } from '~/store/컴포넌트명'
+
+    export default: {
+      computed: {
+        ...mapState('모듈명', [
+          '데이터명',
+          '데이터명',
+          '데이터명'
+        ])
+      }
+    }
+  </script>
+  ```
+  ```html
+  <template>
+    {{ 모듈명.데이터명 }}
+  </template>
+  
+  <script>
+    import { mapStore } from 'vuex'
+    import { use모듈명 } from '~/store/컴포넌트명'
+
+    export default: {
+      computed: {
+        ...mapStores([use모듈명])
+      }
+    }
+  </script>
+  ```
+
+## 상태 변화
+`$patch()`메소드를 사용하여 state의 상태를 변화시킬 수 있다.
+
+  __매개변수__
+  - 객체데이터와 화살표함수를 사용 할 수 있다.
+
+***
+
+## 상태 초기화
+`$reset()`메소드를 사용하면 state의 초기 상태로 되돌릴 수 있다.
+
+***
